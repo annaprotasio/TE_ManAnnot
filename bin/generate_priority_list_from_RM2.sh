@@ -2,10 +2,10 @@
 
 if [ $# -ne 4 ]
 then
-    echo -e "\nusage: $0 <RM2output.fa> <genome.fa> <pfam_db_dir> <github_repo_DIR>\n"
+    echo -e "\nusage: `basename $0` <RM2output.fa> <genome.fa> <pfam_db_dir> <github_repo_DIR>\n"
     echo -e "DESCRIPTION: 	This script runs a little pipeline that: 1) reduces sequence redundancy from <RM2output.fa> using cd-hit-est; 2) extract info from RM2 fasta headers; 3) for each RM2 family, makes a rough estimate of the number of copies in the genome; 4) calculates no of Pfam domains in each putative RM2 family and 5) calculates length of consensus.\n"
 
-    echo -e "DEPENDENCIES: 	Requires installation of pfam_scan.pl, cd-hit, blast, samtools OR Use conda install recommendations from paper and activate the environment before running this script. \n"
+    echo -e "REQUIRES: 	Installation of pfam_scan.pl and their database, cd-hit, blast OR Use conda install recommendations from paper and activate the environment before running this script.\n"
 
     echo -e "INPUT:       	<RM2output.fa>		output from RM2 often with the ending `rm2.db-families.fa` "
     echo -e "             	<genome.fa>			genome used to predict the library"
