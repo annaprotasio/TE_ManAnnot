@@ -42,7 +42,8 @@ sort cdhit.fa.tab | awk '{OFS="\t"; $NF=""; print $0}' > col1.txt
 # sort cdhit.fa.fai | awk '{print $1}' > fam_names.txt
 
 bash $repo/bin/get_fasta_length.sh cdhit.fa
-awk '{print $2}' cdhit.fa.len > col2.txt
+sort cdhit.fa.len | awk '{print $NF}' > col2.txt
+sort cdhit.fa.len | awk '{print $1}' > fam_names.txt
 
 # P5 blast hits
 
@@ -60,6 +61,7 @@ cat fam_names.txt genome.blast.o | sed 's/\#/ /g' | awk '{print $1}' | sort | un
 
 getorf -sequence cdhit.fa -outseq cdhit.orf -minsize 300
 
+# check if pfam has been run, otherwise run it
 FILE=./pfam.results
 if [ ! -f "$FILE" ]; then
     echo "$FILE does not exist. Running Pfam, this can take some time"
