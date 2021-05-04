@@ -21,29 +21,28 @@ genome=$2
 pfamdb=$3
 repo=$4
 
-# P2 reduce redundancy
+# P1 reduce redundancy
 
 FILE=cdhit.fa.clstr
 if [ ! -f "$FILE" ]; then
     echo "cd-hit-est has not be run. Running cd-hit-est, this can take some time"
-   cd-hit-est -i $rmout -o cdhit.fa -aS 0.8 -c 0.8 -G 0
+   cd-hit-est -i $rmout -o cdhit.fa -aS 0.8 -c 0.8 -G 0 -b 500
 fi
 
-# P1 extract info from headers from cd-hit-output
+# P2 (make col1.txt) extract info from headers from cd-hit-output 
 
-perl $repo/bin/rm2_fams2table.pl cdhit.fa # makes cdhit.fa.tab
+# perl $repo/bin/rm2_fams2table.pl cdhit.fa # makes cdhit.fa.tab (DEPRICATED)
 
-sort cdhit.fa.tab | awk '{OFS="\t"; $NF=""; print $0}' > col1.txt
+awk '{ if ($1~/^>/) {print $1}}' cdhit.fa | sed 's/\>//1' | sort > col1.txt
 
-# P4 obtain sequence length
+# P3 (make col2.txt) obtain sequence length
 
-# samtools faidx cdhit.fa
-# sort cdhit.fa.fai | awk '{print $2}' > col2.txt
-# sort cdhit.fa.fai | awk '{print $1}' > fam_names.txt
+# samtools faidx cdhit.fa (DEPRICATED)
+# sort cdhit.fa.fai | awk '{print $2}' > col2.txt (DEPRICATED)
+# sort cdhit.fa.fai | awk '{print $1}' > fam_names.txt (DEPRICATED)
 
 bash $repo/bin/get_fasta_length.sh cdhit.fa
 sort cdhit.fa.len | awk '{print $NF}' > col2.txt
-sort cdhit.fa.len | awk '{print $1}' > fam_names.txt
 
 # P5 blast hits
 
@@ -55,7 +54,7 @@ fi
 
 blastn -query cdhit.fa -db $genome -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen" | awk '{OFS="\t"; if ($3 >= 80 && (($4/$13) > 0.5 ) ) {print $0,$4/$13}  }' > genome.blast.o
 
-cat fam_names.txt genome.blast.o | sed 's/\#/ /g' | awk '{print $1}' | sort | uniq -c | awk '{print $1-1}' > col3.txt
+cat col1.txt genome.blast.o | awk '{print $1}' | sort | uniq -c | sort -k 2 | awk '{print $1-1}' > col3.txt
 
 # P3 predict domains with Pfam
 
@@ -68,11 +67,9 @@ if [ ! -f "$FILE" ]; then
     pfam_scan.pl -fasta cdhit.orf -dir $pfamdb > pfam.results
 fi
 
-awk '{if ($6~/^PF/) {print $1}}' < pfam.results | sed 's/\#/ /1' | awk '{print $1}' | sort > pf.domains.count
+awk '{if ($6~/^PF/) {print $1}}' < pfam.results |  sed 's/_/\//2;s/_/ /2' | awk '{print $1}' | sort > pf.domains.count
 
-grep '>' cdhit.fa | sed 's/\#/ /1;s/^>//g' | awk '{print $1}' >> pf.domains.count
-
-cat pf.domains.count | sort | uniq -c | awk '{print $1-1}' > col4.txt
+cat col1.txt pf.domains.count | sort | uniq -c | sort -k 2 | awk '{print $1-1}' > col4.txt
 
 
 # paste all outputs
