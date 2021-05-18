@@ -1,2 +1,2 @@
 # TE_ManAnnot
-Accompanying repository for our publications on manual curation methods for Transposable Elements. 
+Accompanying repository for our publication on manual curation methods for Transposable Elements. 
