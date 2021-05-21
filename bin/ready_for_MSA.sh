@@ -1,17 +1,19 @@
 #!/bin/bash
 if [ $# -ne 2 ] 
 then 
-    echo -e "\nUsage: $0 <familyname.fa.blast.flank.bed.fa> <max_number_sequences>"
+    echo -e "\nUSAGE:         `basename $0` <input.multi.fa> <max_number_sequences>"
    
-    echo -e "\Description: Reduces the number of sequences (entries) for alignment. First, the algorithm takes a quarter of the largest (in nucleotides) sequences from the multifasta <input> file. Second, it randomly selects  more sequences until completing a total of <max_number_sequences>.
-                           It also creates a *subset.len file, which indicates the lenghts and genomic coordinates corresponding to the subset of selected sequences. 
-                           If the file has less number of sequences than the threshold selected by the user, the script does not have any effect and a message is printed to stdout. "
+    echo -e "\nDESCRIPTION:   Reduces the number of sequences (entries) for alignment." 
+    echo -e "               First, the algorithm takes 1/4 of the largest  sequences from the multifasta <input.multi.fa> file."
+    echo -e "               Second, it randomly selects  more sequences until completing a total of <max_number_sequences>."
+     echo -e "               It also creates a *subset.len file, which indicates the lenghts and genomic coordinates corresponding to the subset of selected sequences."
+      echo -e "             If <input.multi.fa> has less sequences than <max_number_sequences>, the script does not have any effect and a message is printed to stdout. "
                
-   echo -e "\Input: A multi-fasta file, for example from the output of 'make_fasta_from_blast.sh' script."
-   echo -e "\Output: rdmSubset.fa and rdmSubset.len files " 
-                    
-   echo -e "\Preconditions: <max_number_sequences> must be a positive integer.
-                            Samtools must be installed"
+   echo -e "\nINPUT:        <input.multi.fa> is a multi-fasta file (e.g output from 'make_fasta_from_blast.sh') and > 100 entries."
+   echo -e "              <max_number_sequences> must be a positive integer."
+   
+   echo -e "\nOUTPUT:       rdmSubset.fa and rdmSubset.len files " 
+   echo -e "REQUIRES:     Samtools must be installed"
 			     
     exit
     
