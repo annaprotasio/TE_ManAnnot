@@ -82,7 +82,7 @@ echo "the fasta has "$fasta_count " sequences"
 
 # make alignment using 2 threads
 
-mafft --reorder --thread 2 $out.blast.bed.fa > $out.maf.fa
+mafft --reorder  $out.blast.bed.fa > $out.maf.fa
 
 # remove redundant files
 rm $out.blast.o $out.blast.bed *.blast.flank.bed
