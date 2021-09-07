@@ -60,8 +60,8 @@ echo "query sequence" $out
 echo "minimum length of blast hit = " $min_length
 echo "the hit locus will be extended" = $flank "bases in each direction"
 
-# run blast # evalue cutoff is 1e-20
-echo "#qseqid sseqid pident length mismatch qstart qend sstart send sstrand" > $out.blast.o
+# run blast # evalue cutoff is 1e-20 - this can be changed to a lower value ( 1e-10 for example) to capture less similar hits 
+echo "#qseqid sseqid pident length mismatch qstart qend sstart send sstrand" > $out.blast.o # this step writes the column names in the out put file
 blastn -query $fasta_in -db $genome -outfmt "6 qseqid sseqid pident length mismatch qstart qend sstart send sstrand" -evalue 1e-20 | awk -v "ml=$min_length" '{OFS="\t"; if ($4 > ml) {print $0}}' >> $out.blast.o
 
 # parse blast result into a bed file. 
@@ -80,9 +80,9 @@ fasta_count=`grep -c ">" $out.blast.bed.fa`
 
 echo "the fasta has "$fasta_count " sequences"
 
-# make alignment using 2 threads
+# make alignment. If multiple processors are available, `--threads n` can be increases by changing c to a higher number. For a standard laptop computer this could be 2 or 3. 
 
-mafft --reorder  $out.blast.bed.fa > $out.maf.fa
+mafft --reorder  --threads 1 $out.blast.bed.fa > $out.maf.fa
 
 # remove redundant files
 rm $out.blast.o $out.blast.bed *.blast.flank.bed
