@@ -26,14 +26,14 @@ repo=$4
 FILE=cdhit.fa.clstr
 if [ ! -f "$FILE" ]; then
     echo "cd-hit-est has not be run. Running cd-hit-est, this can take some time"
-   cd-hit-est -i $rmout -o cdhit.fa -aS 0.8 -c 0.8 -G 0 -b 500
+   cd-hit-est -i $rmout -o cdhit.fa  -d 0 -aS 0.8 -c 0.8 -G 0 -g 1 -b 500 
 fi
 
 # P2 (make col1.txt) extract info from headers from cd-hit-output 
 
 # perl $repo/bin/rm2_fams2table.pl cdhit.fa # makes cdhit.fa.tab (DEPRICATED)
 
-awk '{ if ($1~/^>/) {print $1}}' cdhit.fa | sed 's/\>//1' | sort > col1.txt
+awk '{ if ($1~/^>/) {print $1}}' cdhit.fa | sed 's/>//1' | sort > col1.txt
 
 # P3 (make col2.txt) obtain sequence length
 
