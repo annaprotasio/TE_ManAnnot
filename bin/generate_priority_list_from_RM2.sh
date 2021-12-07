@@ -67,14 +67,17 @@ if [ ! -f "$FILE" ]; then
     pfam_scan.pl -fasta cdhit.orf -dir $pfamdb > pfam.results
 fi
 
+echo "\n Finished with Pfam searches\n"
+
 awk '{if ($6~/^PF/) {print $1}}' < pfam.results |  sed 's/_/\//2;s/_/ /2' | awk '{print $1}' | sort > pf.domains.count
 
 cat col1.txt pf.domains.count | sort | uniq -c | sort -k 2 | awk '{print $1-1}' > col4.txt
 
-
 # paste all outputs
 
 paste -d "\t" col1.txt col2.txt col3.txt col4.txt > final_priority.table.tab
+
+echo "\n Priority table generated\n"
 
 
 
