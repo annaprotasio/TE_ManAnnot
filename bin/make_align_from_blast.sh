@@ -23,7 +23,8 @@ fi
 
 genome=$1
 fasta_in=$2
-out=`echo "$fasta_in" | cut -d'.' -f1`
+#out=`echo "$fasta_in" | cut -d'.' -f1`
+out=`basename $2` # update 18.05.2022 thanks to piosierra
 min_length=$3
 flank=$4
 
@@ -82,7 +83,8 @@ echo "the fasta has "$fasta_count " sequences"
 
 # make alignment. If multiple processors are available, `--threads n` can be increases by changing c to a higher number. For a standard laptop computer this could be 2 or 3. 
 
-mafft --reorder  --threads 1 $out.blast.bed.fa > $out.maf.fa
+
+mafft --reorder  --thread -1 $out.blast.bed.fa > $out.maf.fa #updated on 18.05.2022 to reflect changes in mafft v7.505 thanks to piosierra
 
 # remove redundant files
 rm $out.blast.o $out.blast.bed *.blast.flank.bed
