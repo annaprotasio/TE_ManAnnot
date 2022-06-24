@@ -11,7 +11,7 @@ then
     echo -e "             	<genome.fa>			genome used to predict the library"
     echo -e "             	<pfam_db_DIR>		path to the Pfam database directory"
 	echo -e "             	<github_repo_DIR>	path to the local github repo (previously downloaded), for example \"~/Desktop/path_to_dir/TE_tools_avp25/\" "
-    echo -e "OUTPUT:	    A table; columns are: consensus name, RM2 superfmaily prediction, RM2 family prediction, INR/LTR, consensus length (nt)  \n"     
+    echo -e "OUTPUT:	    A table; columns are: consensus name given by RM2, consensus length (nt), number of good blast hits, number of good Pfam domains found \n"     
 
     exit
 fi
